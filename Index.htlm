@@ -1,0 +1,486 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#142438">
+<title>BIG GAME WORLD</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#101b2b;color:white;
+ font-family:Arial,sans-serif;
+}
+header{
+ background:linear-gradient(135deg,#173b50,#142438);
+ padding:28px 16px;text-align:center;
+ border-bottom:2px solid #43d6ad;
+}
+header h1{color:#65e6bd;font-size:29px;margin:5px}
+header p{color:#c3d5df;font-size:13px}
+nav{
+ display:flex;gap:8px;overflow-x:auto;
+ padding:12px;background:#192b40;
+ position:sticky;top:0;z-index:5;
+}
+nav button{white-space:nowrap}
+button{
+ border:0;border-radius:10px;padding:11px 15px;
+ background:#42d6aa;color:#102c2a;
+ font-weight:bold;cursor:pointer;
+}
+button:active{transform:scale(.97)}
+button.secondary{background:#30465d;color:white}
+button.danger{background:#c65353;color:white}
+main{max-width:950px;margin:auto;padding:16px}
+section{margin-bottom:25px}
+h2{color:#69e6bd;font-size:21px}
+.games{
+ display:grid;grid-template-columns:repeat(2,1fr);gap:12px;
+}
+.card{
+ background:#20344b;border:1px solid #344d65;
+ border-radius:16px;padding:16px;text-align:center;
+}
+.card .emoji{font-size:42px}
+.card h3{margin:9px 0}
+.card p{font-size:12px;color:#b9cbd8;min-height:30px}
+.panel{
+ background:#20344b;border:1px solid #344d65;
+ border-radius:15px;padding:16px;margin-top:14px;
+}
+input,select{
+ width:100%;padding:13px;margin:8px 0;
+ border-radius:9px;border:1px solid #536b7c;
+ background:#142438;color:white;font-size:15px;
+}
+.row{display:flex;gap:9px;flex-wrap:wrap}
+.row button{flex:1}
+.stats{
+ display:grid;grid-template-columns:repeat(2,1fr);gap:10px;
+}
+.stat{
+ background:#142438;border-radius:12px;
+ padding:13px;text-align:center;
+}
+.stat strong{display:block;color:#68e6bd;font-size:22px}
+.hidden{display:none!important}
+.menu-item{
+ display:flex;justify-content:space-between;
+ align-items:center;gap:8px;
+ padding:12px 0;border-bottom:1px solid #40536a;
+}
+.menu-item button{padding:9px}
+#gameScreen{display:none}
+#gameScreen.active{display:block}
+#gameScreen .game-view{background:#1d3447;padding:17px;border-radius:16px}
+#notice{color:#ffe18a;min-height:25px;margin-top:10px}
+footer{text-align:center;color:#8da4b6;padding:30px}
+.small{font-size:12px;color:#aebfce}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🎮 BIG GAME WORLD</h1>
+<p>CREATE • PLAY • CONNECT</p>
+<p>Thế giới game tương tác livestream của bạn</p>
+</header>
+
+<nav>
+<button onclick="showPage('home')">🏠 Trang chủ</button>
+<button onclick="showPage('pub')">🍻 Quán nhậu</button>
+<button onclick="showPage('builder')">🛠️ Game Builder</button>
+<button onclick="showPage('ranking')">🏆 TOP 10</button>
+</nav>
+
+<main>
+
+<!-- TRANG CHỦ -->
+<div id="home">
+
+<section>
+<h2>🌍 GAME CENTER</h2>
+<div class="games" id="gameList">
+
+<div class="card">
+<div class="emoji">🍻</div>
+<h3>Quán Nhậu Vỉa Hè</h3>
+<p>Mở quán, phục vụ khách, kiếm tiền và nâng cấp.</p>
+<button onclick="showPage('pub')">Vào chơi</button>
+</div>
+
+<div class="card">
+<div class="emoji">🌱</div>
+<h3>Nông Trại Vui Vẻ</h3>
+<p>Trồng cây, thu hoạch và phát triển nông trại.</p>
+<button onclick="comingSoon('Nông trại')">Chơi game</button>
+</div>
+
+<div class="card">
+<div class="emoji">🏪</div>
+<h3>Quản Lý Siêu Thị</h3>
+<p>Bán hàng, nhập hàng và mở rộng siêu thị.</p>
+<button onclick="comingSoon('Siêu thị')">Chơi game</button>
+</div>
+
+<div class="card">
+<div class="emoji">🐶</div>
+<h3>Thế Giới Thú Cưng</h3>
+<p>Nuôi dưỡng và chăm sóc thú cưng.</p>
+<button onclick="comingSoon('Nuôi thú')">Chơi game</button>
+</div>
+
+<div class="card">
+<div class="emoji">🧩</div>
+<h3>Giải Đố Thông Minh</h3>
+<p>Thử thách trí tuệ và tích lũy điểm.</p>
+<button onclick="comingSoon('Giải đố')">Chơi game</button>
+</div>
+
+</div>
+</section>
+
+<section class="panel">
+<h2>✨ GAME MỚI CỦA BẠN</h2>
+<div id="customGameList">Chưa có game tự tạo.</div>
+</section>
+</div>
+
+<!-- GAME QUÁN NHẬU -->
+<div id="pub" class="hidden">
+
+<h2>🍻 QUÁN NHẬU VỈA HÈ</h2>
+
+<div class="panel">
+<h3>🏮 Quán Nhậu Của Tôi</h3>
+<p class="small">Hãy quản lý quán thật tốt để trở thành ông/bà chủ nổi tiếng!</p>
+
+<div class="stats">
+<div class="stat">💰 Tiền vốn<strong id="money">500</strong></div>
+<div class="stat">👥 Khách đã phục vụ<strong id="customers">0</strong></div>
+<div class="stat">🪑 Số bàn<strong id="tables">2</strong></div>
+<div class="stat">⭐ Cấp độ quán<strong id="level">1</strong></div>
+</div>
+</div>
+
+<div class="panel">
+<h3>🍢 Thực đơn hôm nay</h3>
+<div class="menu-item">
+<span>🍺 Bia lạnh - 30 xu</span>
+<button onclick="serve('bia')">Phục vụ</button>
+</div>
+<div class="menu-item">
+<span>🥜 Đậu phộng - 20 xu</span>
+<button onclick="serve('dau')">Phục vụ</button>
+</div>
+<div class="menu-item">
+<span>🦑 Mực nướng - 80 xu</span>
+<button onclick="serve('muc')">Phục vụ</button>
+</div>
+<div class="menu-item">
+<span>🍗 Gà nướng - 100 xu</span>
+<button onclick="serve('ga')">Phục vụ</button>
+</div>
+<div class="menu-item">
+<span>🍜 Mì xào - 60 xu</span>
+<button onclick="serve('mi')">Phục vụ</button>
+</div>
+<p id="notice">👋 Chào mừng đến với quán nhậu!</p>
+</div>
+
+<div class="panel">
+<h3>🏗️ Nâng cấp quán</h3>
+<div class="row">
+<button onclick="upgradeTables()">+ Thêm bàn (200 xu)</button>
+<button onclick="upgradeLevel()">⭐ Nâng cấp quán (500 xu)</button>
+</div>
+</div>
+
+<div class="panel">
+<h3>📊 Lịch sử kinh doanh</h3>
+<p id="history">Quán vừa khai trương!</p>
+<button class="secondary" onclick="resetPub()">Chơi lại từ đầu</button>
+</div>
+
+</div>
+
+<!-- GAME BUILDER -->
+<div id="builder" class="hidden">
+
+<h2>🛠️ GAME BUILDER</h2>
+
+<div class="panel">
+<h3>➕ Tạo trò chơi mới</h3>
+<p class="small">Đặt tên và chọn biểu tượng cho game của bạn.</p>
+
+<input id="newName" placeholder="Tên trò chơi">
+
+<select id="newIcon">
+<option>🎮</option>
+<option>🌱</option>
+<option>🍻</option>
+<option>🏪</option>
+<option>🐶</option>
+<option>🐱</option>
+<option>🏰</option>
+<option>🚗</option>
+<option>🧩</option>
+<option>⚽</option>
+</select>
+
+<button onclick="createGame()">Tạo game mới</button>
+<p class="small">Game mới sẽ được lưu trên trình duyệt của thiết bị này.</p>
+<div id="builderMessage"></div>
+</div>
+
+<div class="panel">
+<h3>📚 Game đã tạo</h3>
+<div id="builderList">Chưa có game.</div>
+</div>
+</div>
+
+<!-- TOP 10 -->
+<div id="ranking" class="hidden">
+
+<h2>🏆 BẢNG XẾP HẠNG TOP 10</h2>
+<div class="panel">
+<p class="small">Điểm xếp hạng dựa trên thành tích trong trò chơi Quán Nhậu Vỉa Hè trên thiết bị này.</p>
+<div id="topList">Chưa có người chơi.</div>
+</div>
+
+</div>
+
+<!-- MÀN HÌNH GAME SẮP TỚI -->
+<div id="gameScreen">
+<div class="game-view">
+<h2 id="selectedGame"></h2>
+<p>Game này đang trong danh sách phát triển.</p>
+<button onclick="showPage('home')">Quay lại Game Center</button>
+</div>
+</div>
+
+</main>
+
+<footer>
+BIG GAME WORLD © 2026<br>
+CREATE • PLAY • CONNECT
+</footer>
+
+<script>
+
+// LƯU DỮ LIỆU
+function getData(key,defaultValue){
+ try{
+  let value=localStorage.getItem(key);
+  return value===null?defaultValue:JSON.parse(value);
+ }catch(e){return defaultValue;}
+}
+function saveData(){
+ localStorage.setItem("biggame_pub",JSON.stringify(pub));
+ localStorage.setItem("biggame_custom",JSON.stringify(customGames));
+ localStorage.setItem("biggame_ranking",JSON.stringify(ranking));
+}
+
+// ĐIỀU HƯỚNG
+function showPage(page){
+ ["home","pub","builder","ranking"].forEach(id=>{
+  document.getElementById(id).classList.add("hidden");
+ });
+ document.getElementById("gameScreen").classList.remove("active");
+ document.getElementById(page).classList.remove("hidden");
+ if(page==="pub")renderPub();
+ if(page==="builder")renderBuilder();
+ if(page==="ranking")renderRanking();
+ window.scrollTo(0,0);
+}
+
+function comingSoon(name){
+ document.getElementById("selectedGame").textContent="🎮 "+name;
+ ["home","pub","builder","ranking"].forEach(id=>{
+  document.getElementById(id).classList.add("hidden");
+ });
+ document.getElementById("gameScreen").classList.add("active");
+}
+
+// QUÁN NHẬU VỈA HÈ
+let pub=getData("biggame_pub",{
+ money:500,customers:0,tables:2,level:1
+});
+
+const foods={
+ bia:{name:"Bia lạnh",price:30},
+ dau:{name:"Đậu phộng",price:20},
+ muc:{name:"Mực nướng",price:80},
+ ga:{name:"Gà nướng",price:100},
+ mi:{name:"Mì xào",price:60}
+};
+
+function renderPub(){
+ document.getElementById("money").textContent=pub.money;
+ document.getElementById("customers").textContent=pub.customers;
+ document.getElementById("tables").textContent=pub.tables;
+ document.getElementById("level").textContent=pub.level;
+}
+
+function serve(food){
+ let item=foods[food];
+ if(pub.customers>=pub.tables*5){
+  document.getElementById("notice").textContent="😅 Quán đã hết chỗ! Hãy mua thêm bàn.";
+  return;
+ }
+ let earning=item.price*2;
+ pub.money+=earning;
+ pub.customers++;
+ document.getElementById("notice").textContent=
+ "✅ Đã phục vụ "+item.name+"! Thu về "+earning+" xu.";
+ document.getElementById("history").textContent=
+ "Đã phục vụ "+pub.customers+" lượt khách.";
+ updateRanking();
+ renderPub();
+ saveData();
+}
+
+function upgradeTables(){
+ if(pub.money<200){
+  alert("Bạn chưa đủ tiền mua bàn!");
+  return;
+ }
+ pub.money-=200;
+ pub.tables++;
+ document.getElementById("notice").textContent="🪑 Quán đã có thêm một bàn!";
+ renderPub();
+ saveData();
+}
+
+function upgradeLevel(){
+ if(pub.money<500){
+  alert("Bạn chưa đủ 500 xu!");
+  return;
+ }
+ pub.money-=500;
+ pub.level++;
+ document.getElementById("notice").textContent="⭐ Chúc mừng! Quán đã lên cấp "+pub.level;
+ renderPub();
+ saveData();
+}
+
+function resetPub(){
+ if(!confirm("Bạn có chắc muốn chơi lại từ đầu?"))return;
+ pub={money:500,customers:0,tables:2,level:1};
+ renderPub();
+ saveData();
+ document.getElementById("history").textContent="Quán vừa khai trương!";
+ document.getElementById("notice").textContent="🏮 Chào mừng chủ quán mới!";
+}
+
+// GAME BUILDER
+let customGames=getData("biggame_custom",[]);
+
+function createGame(){
+ let name=document.getElementById("newName").value.trim();
+ let icon=document.getElementById("newIcon").value;
+ if(!name){
+  alert("Hãy nhập tên game!");
+  return;
+ }
+ if(customGames.some(g=>g.name.toLowerCase()===name.toLowerCase())){
+  alert("Tên game đã tồn tại!");
+  return;
+ }
+ customGames.push({name:name,icon:icon});
+ document.getElementById("newName").value="";
+ document.getElementById("builderMessage").textContent="✅ Đã thêm game "+name;
+ saveData();
+ renderBuilder();
+ renderHomeGames();
+}
+
+function renderBuilder(){
+ let box=document.getElementById("builderList");
+ if(!customGames.length){
+  box.textContent="Chưa có game.";
+  return;
+ }
+ box.innerHTML="";
+ customGames.forEach((game,index)=>{
+  let row=document.createElement("div");
+  row.className="menu-item";
+  let title=document.createElement("span");
+  title.textContent=game.icon+" "+game.name;
+  let del=document.createElement("button");
+  del.className="danger";
+  del.textContent="Xóa";
+  del.onclick=()=>deleteGame(index);
+  row.append(title,del);
+  box.appendChild(row);
+ });
+}
+
+function deleteGame(index){
+ if(!confirm("Xóa game này?"))return;
+ customGames.splice(index,1);
+ saveData();
+ renderBuilder();
+ renderHomeGames();
+}
+
+function renderHomeGames(){
+ let box=document.getElementById("customGameList");
+ if(!customGames.length){
+  box.textContent="Chưa có game tự tạo.";
+  return;
+ }
+ box.innerHTML="";
+ customGames.forEach(g=>{
+  let item=document.createElement("p");
+  item.textContent=g.icon+" "+g.name;
+  box.appendChild(item);
+ });
+}
+
+// BẢNG XẾP HẠNG
+let ranking=getData("biggame_ranking",[]);
+
+function updateRanking(){
+ let player=ranking.find(p=>p.name==="Chủ quán");
+ if(!player){
+  ranking.push({name:"Chủ quán",score:pub.customers});
+ }else{
+  player.score=pub.customers;
+ }
+ ranking.sort((a,b)=>b.score-a.score);
+ ranking=ranking.slice(0,10);
+}
+
+function renderRanking(){
+ let box=document.getElementById("topList");
+ if(!ranking.length){
+  box.textContent="Chưa có người chơi.";
+  return;
+ }
+ box.innerHTML="";
+ ranking.forEach((p,i)=>{
+  let item=document.createElement("div");
+  item.className="menu-item";
+  let name=document.createElement("span");
+  name.textContent=(i+1)+". "+p.name;
+  let score=document.createElement("strong");
+  score.textContent=p.score+" lượt khách";
+  item.append(name,score);
+  box.appendChild(item);
+ });
+}
+
+// KHỞI ĐỘNG
+renderPub();
+renderHomeGames();
+updateRanking();
+saveData();
+
+</script>
+</body>
+</html>
